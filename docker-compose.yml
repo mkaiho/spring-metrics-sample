@@ -1,0 +1,42 @@
+version: '3.7'
+
+## Environment variables for workspace
+x-app-working-dir: &APP_WORKING_DIR
+  "/home/spring-metrics-sample"
+x-app-project-volume: &APP_PROJECT_VOLUME
+  ".:/home/spring-metrics-sample"
+x-app-environment: &APP_ENVIRONMENT
+  DB_URL: jdbc:mysql://localhost:3306/devdb?serverTimezone=JST
+  DB_USER: devdb
+  DB_PASSWORD: devdev
+  DB_DRIVER: com.mysql.cj.jdbc.Driver
+## Environment variables for mysql database
+x-mysqldb-environment: &MYSQLDB_ENVIRONMENT
+  MYSQL_ROOT_PASSWORD: root
+  MYSQL_DATABASE: devdb
+  MYSQL_USER: devuser
+  MYSQL_PASSWORD: devdev
+
+services:
+  workspace:
+    build:
+      context: ./docker/workspace
+    container_name: template-workspace
+    depends_on:
+      - mysqldb-local
+    volumes:
+      - *APP_PROJECT_VOLUME
+    working_dir: *APP_WORKING_DIR
+    tty: true
+    environment: *APP_ENVIRONMENT
+  mysqldb-local:
+    build:
+      context: ./docker/mysql
+    container_name: template-mysql-local
+    ports:
+      - 13306:3306
+    volumes:
+      - ./docker/mysql/init.d:/docker-entrypoint-initdb.d
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./docker/mysql/data:/var/lib/mysql
+    environment: *MYSQLDB_ENVIRONMENT
