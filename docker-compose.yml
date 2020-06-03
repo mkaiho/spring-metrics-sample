@@ -27,6 +27,8 @@ services:
     volumes:
       - *APP_PROJECT_VOLUME
     working_dir: *APP_WORKING_DIR
+    ports:
+      - 18080:8080
     tty: true
     environment: *APP_ENVIRONMENT
   mysqldb-local:
@@ -40,3 +42,16 @@ services:
       - ./docker/mysql/conf.d:/etc/mysql/conf.d
       - ./docker/mysql/data:/var/lib/mysql
     environment: *MYSQLDB_ENVIRONMENT
+  prometheus:
+    build:
+      context: ./docker/prometheus
+    container_name: prometheus-local
+    ports:
+      - 19090:9090
+    volumes:
+      - ./docker/prometheus/configuration/prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 13000:3000
