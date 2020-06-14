@@ -3,6 +3,7 @@ package com.mkaiho.sample.springmetricsapp.application.service;
 import com.mkaiho.sample.springmetricsapp.application.repository.UserRepository;
 import com.mkaiho.sample.springmetricsapp.domain.model.user.*;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 public class UserService {
@@ -12,13 +13,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UsersResponse getAllUserResponse() {
-        Users users = this.userRepository.findAll();
-        return new UsersResponse(users);
+    public Mono<Users> getAllUser() {
+        Mono<Users> users = Mono.fromSupplier(this.userRepository::findAll);
+        return users;
     }
 
-    public UserResponse getUserResponseById(UserId id) {
-        User user = this.userRepository.findById(id);
-        return new UserResponse(user);
+    public Mono<User> getUserById(UserId id) {
+        Mono<User> user = Mono
+                .fromSupplier(() -> this.userRepository.findById(id));
+        return user;
     }
 }
