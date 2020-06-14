@@ -6,8 +6,8 @@ x-app-working-dir: &APP_WORKING_DIR
 x-app-project-volume: &APP_PROJECT_VOLUME
   ".:/home/spring-metrics-sample"
 x-app-environment: &APP_ENVIRONMENT
-  DB_URL: jdbc:mysql://localhost:3306/devdb?serverTimezone=JST
-  DB_USER: devdb
+  DB_URL: jdbc:mysql://mysqldb-local:3306/devdb?serverTimezone=UTC
+  DB_USER: devuser
   DB_PASSWORD: devdev
   DB_DRIVER: com.mysql.cj.jdbc.Driver
 ## Environment variables for mysql database

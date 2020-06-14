@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mkaiho.sample.springmetricsapp.infrastructure.datasource.user.UserMapper">
+    <resultMap id="User" type="com.mkaiho.sample.springmetricsapp.domain.model.user.User">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <sql id="userColumns">
+        `id`,
+        `name`
+    </sql>
+
+    <select id="findAll" resultMap="User">
+        SELECT
+        <include refid="userColumns"/>
+        FROM `users`
+    </select>
+
+    <select id="findById" resultMap="User">
+        SELECT
+        <include refid="userColumns"/>
+        FROM `users`
+        WHERE `id` = #{id}
+    </select>
+</mapper>
